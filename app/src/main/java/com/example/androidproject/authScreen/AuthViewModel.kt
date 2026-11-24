@@ -22,6 +22,9 @@ class AuthViewModel : ViewModel() {
     var loginMessage by mutableStateOf<String?>(null)
         private set
 
+    var isAuthenticated by mutableStateOf(false)
+        private set
+
     fun updateUsername(value: String) {
         username = value
         validateUsername()
@@ -56,12 +59,21 @@ class AuthViewModel : ViewModel() {
         val isPassValid = validatePassword()
 
         if (isUserValid && isPassValid) {
-            loginMessage = if (username.trim() == "admin" && password == "password") {
-                "Login Successful!"
+            if (username.trim() == "admin" && password == "password") {
+                loginMessage = "Login Successful!"
+                isAuthenticated = true
             } else {
-                "Invalid username or password!"
+                loginMessage = "Invalid username or password!"
             }
         }
+    }
+
+    fun signOut() {
+        isAuthenticated = false
+        username = ""
+        password = ""
+        usernameError = ""
+        passwordError = ""
     }
 
     fun clearLoginMessage() {
